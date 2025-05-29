@@ -1,56 +1,61 @@
-Paperless Document Search Tool (Async, Snippet-First)
-A powerful OpenWebUI tool for searching, previewing, and extracting content from your Paperless DMS.
+# Paperless Document Search Tool (Async, Snippet-First)
+
+A powerful OpenWebUI tool for searching, previewing, and extracting content from your [Paperless](https://github.com/paperless-ngx/paperless-ngx) DMS.  
 Features async requests, snippet-first search to avoid LLM token overload, and configurable parameters via environment or UI.
 
-Features
-Snippet-first retrieval: Returns a preview (snippet) of each document, avoiding LLM context/token issues.
+---
 
-View full content on demand: Easily load the full content of any document by its ID.
+## Features
 
-Fully async: Never blocks the UI, even for large archives.
+* **Snippet-first retrieval** – returns a preview (snippet) of each document, preventing LLM context/token issues.  
+* **View full content on demand** – load the complete text of any document by its ID.  
+* **Fully async** – never blocks the UI, even for large archives.  
+* **Highly configurable** – adjust the number and length of snippets via simple valves.
 
-Highly configurable: Adjust the number and length of snippets returned using simple valves.
+---
 
-Installation
-Clone or copy this repository (or script) into your OpenWebUI tools directory.
+## Installation
 
-Install requirements (if not already installed):
+1. Clone or copy this repository (or script) into your OpenWebUI tools directory.  
+2. Install requirements (if not already installed):
 
-bash
-Kopieren
-Bearbeiten
+~~~bash
 pip install httpx python-dotenv pydantic
-Set environment variables (.env in the tool directory or in your system):
+~~~
 
-env
-Kopieren
-Bearbeiten
+3. Set environment variables (`.env` in the tool directory or in your system):
+
+~~~env
 PAPERLESS_URL=https://paperless.yourdomain.com/
 PAPERLESS_TOKEN=your_token_here
 SNIPPET_LENGTH=1500
 MAX_SNIPPETS=10
-Configuration
-All major parameters can be set via environment variables, config files, or directly via the OpenWebUI valves panel:
+~~~
 
-Variable	Description	Default
-PAPERLESS_URL	Your Paperless base URL	(required)
-PAPERLESS_TOKEN	Your Paperless API token	(required)
-SNIPPET_LENGTH	Max chars per snippet (preview)	1500
-MAX_SNIPPETS	Max number of snippets per search	10
+---
 
-Usage
-1. Search for snippets (previews):
+## Configuration
 
-Call the tool’s search_paperless_snippets() function
-(either via OpenWebUI, API, or directly in code)
+| Variable        | Description                                 | Default |
+|-----------------|---------------------------------------------|---------|
+| `PAPERLESS_URL` | Your Paperless base URL                     | — |
+| `PAPERLESS_TOKEN` | Your Paperless API token                  | — |
+| `SNIPPET_LENGTH` | Max characters per snippet (preview)       | 1500 |
+| `MAX_SNIPPETS`   | Max number of snippets per search          | 10 |
 
-Returns a list of document previews, each with: id, title, created, correspondent, document_type, snippet (preview), and source.
+---
 
-Example output (JSON):
+## Usage
 
-json
-Kopieren
-Bearbeiten
+### 1. Search for snippets (previews)
+
+Call the tool’s `search_paperless_snippets()` function (via OpenWebUI, API, or directly in code).
+
+*Returns a list of document previews containing `id`, `title`, `created`, `correspondent`, `document_type`, `snippet`, and `source`.*
+
+Example response:
+
+~~~json
 [
   {
     "id": 123,
@@ -58,21 +63,21 @@ Bearbeiten
     "created": "2024-05-10T08:13:42Z",
     "correspondent": "ACME Corp",
     "document_type": "Invoice",
-    "snippet": "Dear customer, your invoice for May ...",
+    "snippet": "Dear customer, your invoice for May …",
     "source": "https://paperless.yourdomain.com/documents/123"
-  },
-  ...
+  }
 ]
-2. Load full content for a specific document:
+~~~
 
-Call the tool’s get_paperless_document_full(document_id=...) function.
+### 2. Load full content for a specific document
 
-Returns the entire content and metadata for the document.
+Call `get_paperless_document_full(document_id=...)` to receive the entire content and metadata.
 
-Example (Python)
-python
-Kopieren
-Bearbeiten
+---
+
+## Example (Python)
+
+~~~python
 from tools.paperless_tool import Tools
 
 tools = Tools()
@@ -82,21 +87,31 @@ results_json = await tools.search_paperless_snippets(documentTypeName="Invoice")
 
 # Load full content for document with ID 123
 full_doc_json = await tools.get_paperless_document_full(document_id=123)
-Tips
-Adjust SNIPPET_LENGTH and MAX_SNIPPETS to fine-tune performance and LLM compatibility.
+~~~
 
-For very large Paperless archives, keep MAX_SNIPPETS low to avoid UI/model overload.
+---
 
-Snippet search is ideal for chat-driven "Find my ..." use cases; full text is only loaded when the user requests it.
+## Tips
 
-License
+* Tune `SNIPPET_LENGTH` and `MAX_SNIPPETS` for optimal performance and LLM compatibility.  
+* For very large archives, keep `MAX_SNIPPETS` low to avoid UI/model overload.  
+* Snippet search is ideal for “Find my …” use cases; full text is fetched only on request.
+
+---
+
+## License
+
 MIT
 
-Credits
-Original author: Jonas Leine
+---
 
-Optimization & OpenWebUI adaptation: Alexander Klingspor
+## Credits
 
-Contributing
-PRs welcome! If you add new features (e.g., filtering by more Paperless fields, fuzzy search, better metadata, etc.), please open an issue or pull request.
+* **Original author:** Jonas Leine  
+* **OpenWebUI adaptation & optimisation:** ChatGPT/Alex
 
+---
+
+## Contributing
+
+Pull requests are welcome! If you add features (e.g. extra filters, fuzzy search, richer metadata), please open an issue or PR.
