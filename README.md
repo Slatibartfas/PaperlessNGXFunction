@@ -108,7 +108,7 @@ MIT
 ## Credits
 
 * **Original author:** Jonas Leine  
-* **OpenWebUI adaptation & optimisation:** ChatGPT/Alex
+* **OpenWebUI adaptation & optimisation:** Slatibartfas
 
 ---
 
